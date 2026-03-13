@@ -15,7 +15,7 @@ def query(ra: float, dec: float, radius: float):
     query = f"""SELECT source_id, ra, dec, phot_g_mean_mag 
     FROM gaiadr3.gaia_source
     WHERE CONTAINS(
-       POINT('ICRS' {ra}, {dec}),
+       POINT('ICRS', {ra}, {dec}),
         CIRCLE('ICRS', {ra}, {dec}, {radius})
     ) = 1"""
     job = Gaia.launch_job(query)
