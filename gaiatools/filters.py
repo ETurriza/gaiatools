@@ -3,8 +3,7 @@ def filter_by_band(band:str, results:DataFrame, min_mag=None, max_mag=None):
     if min_mag is not None and max_mag is not None:
         return results[(results[band] < max_mag) & (results[band]> min_mag)]
     elif min_mag is not None:
-        
-            return results[results[band] > min_mag]
+          return results[results[band] > min_mag]
     else:
          return results[results[band]<max_mag]
     
