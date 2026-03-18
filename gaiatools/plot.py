@@ -27,3 +27,12 @@ def dbscan(results:DataFrame, eps = 0.3, min_samples=15):
     db.fit(results[["ra", "dec", "pmra", "pmdec"]]) 
     results["Cluster"] = db.labels_
     return results
+
+def plot_clusters(results:DataFrame):
+    c = results["Cluster"]
+    fig, ax = plt.subplots()
+    ax.scatter(results["ra"], results["dec"], c=c, cmap='coolwarm')
+    ax.set_xlabel("Right ascencion")
+    ax.set_ylabel("Declination")
+    ax.set_title("Clusters")
+    plt.show()
