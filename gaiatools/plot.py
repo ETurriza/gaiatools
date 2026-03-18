@@ -13,8 +13,9 @@ def plot_sky(results:DataFrame):
 def plot_hr(results:DataFrame):
     results = results.copy()
     results["Color"] = results["phot_bp_mean_mag"] - results["phot_rp_mean_mag"]
+    c = results["Color"]
     fig, ax = plt.subplots()
-    ax.scatter(results["Color"], results["phot_g_mean_mag"])
+    ax.scatter(x=c, y=results["phot_g_mean_mag"], c = c, cmap='coolwarm')
     ax.invert_yaxis()
     ax.set_xlabel("Temperature")
     ax.set_ylabel("Brightness")
