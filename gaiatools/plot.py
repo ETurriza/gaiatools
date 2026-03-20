@@ -1,4 +1,5 @@
 from sklearn.cluster import DBSCAN
+from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 from pandas import DataFrame
 
@@ -23,17 +24,22 @@ def plot_hr(results:DataFrame):
     plt.show()
 
 def dbscan(results:DataFrame, eps = 0.3, min_samples=15):
-    results = results.copy()
+    results = results.dropna(subset=["ra", "dec", "pmra", "pmdec"])
     db = DBSCAN(eps=eps, min_samples=min_samples)
-    db.fit(results[["ra", "dec", "pmra", "pmdec"]]) 
+    features = results[["ra", "dec", "pmra", "pmdec"]]
+    features_scaled = StandardScaler().fit_transform(features)
+    db.fit(features_scaled)
     results["Cluster"] = db.labels_
     return results
 
 def plot_clusters(results:DataFrame):
     c = results["Cluster"]
+    noise = results[results["Cluster"] == -1]
+    cluster = results[results["Cluster"] != -1]
     fig, ax = plt.subplots()
-    ax.scatter(results["ra"], results["dec"], c=c, cmap='coolwarm')
+    ax.scatter(noise["ra"], noise["dec"], c="gray", s=5, alpha=0.3)
+    ax.scatter(cluster["ra"], cluster["dec"], c=cluster["Cluster"], cmap="tab10")
     ax.set_xlabel("Right ascencion")
     ax.set_ylabel("Declination")
     ax.set_title("Clusters")
-    plt.show()
+    plt.show()  

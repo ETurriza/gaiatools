@@ -1,6 +1,6 @@
 from astroquery.gaia import Gaia 
-
-def query(ra: float, dec: float, radius: float):
+import pandas as pd
+def query(ra: float, dec: float, radius: float, limit: int=2000) -> pd.DataFrame:
     """
     The following code communicate directly with the GAIA API in order to retrieve the desired information when given an specific area in the sky. 
 
@@ -12,7 +12,7 @@ def query(ra: float, dec: float, radius: float):
     Returns: 
     DataFrame: Information of all the stars in the defined zone
 """
-    query = f"""SELECT source_id, ra, dec, phot_g_mean_mag,phot_bp_mean_mag, phot_rp_mean_mag, parallax, pmra, pmdec 
+    query = f"""SELECT TOP {limit} source_id, ra, dec, phot_g_mean_mag,phot_bp_mean_mag, phot_rp_mean_mag, parallax, pmra, pmdec 
     FROM gaiadr3.gaia_source
     WHERE CONTAINS(
        POINT('ICRS', {ra}, {dec}),
