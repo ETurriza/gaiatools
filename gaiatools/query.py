@@ -12,7 +12,7 @@ def query(ra: float, dec: float, radius: float, limit: int=2000) -> pd.DataFrame
     Returns: 
     DataFrame: Information of all the stars in the defined zone
 """
-    query = f"""SELECT TOP {limit} source_id, ra, dec, phot_g_mean_mag,phot_bp_mean_mag, phot_rp_mean_mag, parallax, pmra, pmdec 
+    query = f"""SELECT TOP {limit} source_id, ra, dec, phot_g_mean_mag,phot_bp_mean_mag, phot_rp_mean_mag, parallax,parallax_over_error, pmra, pmdec
     FROM gaiadr3.gaia_source
     WHERE CONTAINS(
        POINT('ICRS', {ra}, {dec}),
