@@ -1,5 +1,5 @@
 from .query import query
-from .plot import plot_sky, plot_hr, plot_clusters, dbscan
+from .plot import plot_sky, plot_hr, plot_clusters, hdbscan
 from .filters import filter_by_band, filter_by_distance
 from pandas import DataFrame
 class StarCatalog:
@@ -26,8 +26,8 @@ class StarCatalog:
     def plot_clusters(self, result):
         plot_clusters(result)
 
-    def dbscan(self, eps=0.3, min_samples=15):
-        return dbscan(self.data, eps=eps, min_samples=min_samples)
+    def hdbscan(self, min_cluster_sizee=15):
+        return hdbscan(self.data, min_cluster_size=15)
     
     def filter_by_band( self, band:str, min_mag=None, max_mag=None):
         return filter_by_band(band=band, results = self.data, min_mag=min_mag, max_mag= max_mag )
