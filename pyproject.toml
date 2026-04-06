@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name="gaiatools"
+version="0.1.0"
+description="Python library for analyzing and visualizing GAIA catalog"
+requires-python=">=3.10"
+dependencies = [
+	"pandas",
+	"numpy",
+	"plotly",
+	"astroquery",
+	"scikit-learn",
+	"astropy",
+	"requests"
+	]
+
+[[project.authors]]
+name = "Eduardo Turriza Fortoul"
+
+[project.urls]
+Repository = "https://github.com/ETurriza/gaiatools"
