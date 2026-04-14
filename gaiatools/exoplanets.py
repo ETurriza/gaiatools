@@ -8,6 +8,12 @@ import plotly.graph_objects as go
 import numpy as np
 
 def get_exoplanets()-> DataFrame:
+    """
+Queries the NASA Exoplanet Archive TAP service and returns all confirmed exoplanets.
+
+Returns:
+    DataFrame: Table with columns hostname, ra, dec, pl_name, pl_orbsmax, pl_masse, pl_rade, pl_orbper.
+"""
     query = f"""SELECT hostname, ra, dec, pl_name, pl_orbsmax, pl_masse, pl_rade, pl_orbper
     FROM pscomppars """
     response = requests.get('https://exoplanetarchive.ipac.caltech.edu/TAP/sync', params={"query":query, "format":"json"})
@@ -15,6 +21,18 @@ def get_exoplanets()-> DataFrame:
     return exoplanets
 
 def crossmatch(gaia_df:DataFrame, exoplanet_df:DataFrame):
+    """
+Cross-matches a Gaia star catalog with the NASA Exoplanet Archive by angular separation.
+Stars within 5 arcseconds of a known exoplanet host are considered matches.
+
+Args:
+    gaia_df (DataFrame): Gaia star catalog with ra and dec columns.
+    exoplanet_df (DataFrame): NASA Exoplanet Archive DataFrame from get_exoplanets().
+
+Returns:
+    DataFrame: Subset of gaia_df containing only stars with confirmed exoplanets,
+               with an additional pl_name column indicating the matched planet.
+"""
     gaia_df = gaia_df.copy()
     gaia_df = gaia_df.dropna(subset=["ra","dec"])
     exoplanet_df= exoplanet_df.dropna(subset=["ra", "dec"])
@@ -33,6 +51,14 @@ def crossmatch(gaia_df:DataFrame, exoplanet_df:DataFrame):
     return gaia_df[angular < 5*u.arcsec]
 
 def plot_system(starName: str, exoplanet_df: DataFrame):
+    """
+    Plots the planetary system of a given star using data from the NASA Exoplanet Archive.
+    Each planet is shown at its semi-major axis distance with its orbital path.
+
+    Args:
+    starName (str): Hostname of the star as it appears in the NASA Exoplanet Archive.
+    exoplanet_df (DataFrame): NASA Exoplanet Archive DataFrame from get_exoplanets().
+"""
     planets = exoplanet_df[exoplanet_df["hostname"] == starName]
     fig = go.Figure()
     fig.add_trace(go.Scatter(
